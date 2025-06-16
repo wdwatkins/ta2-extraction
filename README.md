@@ -7,7 +7,7 @@ This code is a part of the TA2 project for USGS. This is the package that works 
 
 ## How to run Docker Image
 1. Clone the Repository: `git clone git@github.com:DARPA-CRITICALMAAS/ta2-extraction.git `
-2. Create a .env file with : API_KEY & CDR_BEARER so that the application works. The API_KEY should be an OpenAI API key and the CDR Bearer is a connection to the polymer.
+2. Create a .env file with at least `OPENAI_API_KEY`, `CDR_ENDPOINT` and `CDR_BEARER` (for Polymer authenetication). `OPENAI_AZURE_ENDPOINT` and `OPENAI_AZURE_API_VERSION` are needed if you are using Azure OpenAI. 
 3. Fill out any necessary variables in the settings.py
 4. Build the Docker Image: `docker build -t -my-extraction-app .`
 5. Running the Docker Container: 
