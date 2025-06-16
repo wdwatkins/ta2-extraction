@@ -5,7 +5,7 @@ Distribution authorized to U.S. Government only; Proprietary Information, Septem
 
 This Data developed under a SBIR/STTR Contract No 140D0423C0093 is subject to SBIR/STTR Data Rights which allow for protection under DFARS 252.227-7018 (see Section 11.6, Technical Data Rights). 
 """
-from settings import VERSION_NUMBER, SYSTEM_SOURCE
+from settings import VERSION_NUMBER, SYSTEM_SOURCE, CDR_ENDPOINT, MINMOD_URL
 from extraction_package import genericFunctions as generic
 
 def created_document_ref(record_id, title):
@@ -18,13 +18,13 @@ def created_document_ref(record_id, title):
         "volume": "",
         "issue": "",
         "description": "",
-        "uri": f"https://api.cdr.land/v1/docs/documents/{record_id}"
+        "uri": f"{CDR_ENDPOINT}/docs/documents/{record_id}"
     }
             
             
 def create_mineral_site(record_id):
     return {
-        "source_id": "https://api.cdr.land/v1/docs/documents",
+        "source_id": f"{CDR_ENDPOINT}/docs/documents",
         "record_id": f"{record_id}",
         "name": "",
         "location_info": {
@@ -46,8 +46,8 @@ def create_deposit_format_correct():
     return """
         {
         "deposit_type": {
-            "observed text": "https://minmod.isi.edu/resource/deposit_id",  
-            "observed text" : "https://minmod.isi.edu/resource/deposit_id",
+            "observed text": f"{MINMOD_URL}/deposit_id",  
+            "observed text" : f"{MINMOD_URL}/deposit_id",
             "observed text": ""
         }
         }
@@ -70,7 +70,7 @@ def create_inventory_format(commodities_dict, commodity, document_dict):
     # print(f"Found commodity: {found_value}")
     if found_value in commodities_dict:
         # print(f"found value in dict: {commodities_dict[found_value]}")
-        norm_uri =  "https://minmod.isi.edu/resource/" + commodities_dict[found_value]
+        norm_uri =  f"{MINMOD_URL}/" + commodities_dict[found_value]
         commodity_dict["normalized_uri"] = norm_uri
         
     format = {

@@ -14,8 +14,11 @@ from dotenv import load_dotenv
 import os
 load_dotenv()
 
-API_KEY = os.getenv("API_KEY")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY") # For OpenAI
+OPENAI_AZURE_ENDPOINT = os.getenv("OPENAI_AZURE_ENDPOINT", None)
+OPENAI_AZURE_API_VERSION = os.getenv("OPENAI_AZURE_API_VERSION")
 CDR_BEARER = os.getenv("CDR_BEARER")
+CDR_ENDPOINT = os.getenv("CDR_ENDPOINT")
 WORKING_DIR = os.path.expanduser("~/ta2-extraction")
 # print(API_KEY, WORKING_DIR, CDR_BEARER)
 MODEL_TYPE = "gpt-4o"
@@ -24,7 +27,7 @@ LIBRARY_TYPE = "group"
 CATEGORY_VALUES = ["inferred", "indicated","measured", "probable", 
                 "proven", "proven+probable", "inferred+indicated", "inferred+measured",
                 "measured+indicated"]
-URL_STR = "https://minmod.isi.edu/resource/"
+MINMOD_URL = "https://minmod.isi.edu/resource/"
 VERSION_NUMBER = "v3"
 SYSTEM_SOURCE = "Inferlink Extraction"
 STRUCTURE_MODEL = "gpt-4o-2024-08-06"

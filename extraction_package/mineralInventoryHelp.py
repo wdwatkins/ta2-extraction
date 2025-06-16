@@ -9,7 +9,7 @@ import warnings
 import requests
 import copy
 import logging
-from settings import CATEGORY_VALUES,  URL_STR, STRUCTURE_MODEL, WORKING_DIR
+from settings import CATEGORY_VALUES,  MINMOD_URL, STRUCTURE_MODEL, WORKING_DIR
 
 import extraction_package.schemaFormat as schemas
 import extraction_package.genericFunctions as generic
@@ -95,7 +95,7 @@ def create_mineral_inventory_json(extraction_dict, inventory_format, unit_dict, 
                 value = ''
         
         if 'category' in key:
-            current_inventory_format = check_category(current_inventory_format, URL_STR, value)
+            current_inventory_format = check_category(current_inventory_format, MINMOD_URL, value)
             
         elif 'zone' in key:
             ## cannot have an empty zone
@@ -104,7 +104,7 @@ def create_mineral_inventory_json(extraction_dict, inventory_format, unit_dict, 
             else: current_inventory_format.pop('zone')
             
         elif 'chemical' in key:
-            current_inventory_format = check_material_form(current_inventory_format, URL_STR, value)
+            current_inventory_format = check_material_form(current_inventory_format, MINMOD_URL, value)
         
         elif 'cut' in key.lower() and 'unit' not in key.lower():
             current_inventory_format['cutoff_grade']['grade_value'] = value.lower()
@@ -132,11 +132,11 @@ def create_mineral_inventory_json(extraction_dict, inventory_format, unit_dict, 
                 grade_unit_list = list(unit_dict.keys())
                 
                 if value == "%":
-                    current_inventory_format['grade']['grade_unit']['normalized_uri'] = URL_STR + unit_dict['percent'] 
+                    current_inventory_format['grade']['grade_unit']['normalized_uri'] = MINMOD_URL + unit_dict['percent'] 
                 else:
                     found_value = generic.find_best_match(value, grade_unit_list) 
                     if found_value is not None:
-                        current_inventory_format['grade']['grade_unit']['normalized_uri'] = URL_STR + unit_dict[found_value]           
+                        current_inventory_format['grade']['grade_unit']['normalized_uri'] = MINMOD_URL + unit_dict[found_value]           
                 
                 current_inventory_format['grade']['grade_unit'] = generic.add_extraction_dict(value, current_inventory_format['grade']['grade_unit'])
                 
@@ -185,7 +185,7 @@ def check_cutoff_grade_unit(curr_json, value, unit_dict):
         curr_json['cutoff_grade']['grade_unit']['normalized_uri'] = ""
         
         if value == '%':
-            curr_json['cutoff_grade']['grade_unit']['normalized_uri'] = URL_STR + unit_dict['percent']
+            curr_json['cutoff_grade']['grade_unit']['normalized_uri'] = MINMOD_URL + unit_dict['percent']
         
         elif value:
             grade_unit_list = list(unit_dict.keys())
@@ -194,7 +194,7 @@ def check_cutoff_grade_unit(curr_json, value, unit_dict):
             # logger.debug(f"found_value: {found_value}")
             if found_value is not None:
                 # can check of the new new format
-                curr_json['cutoff_grade']['grade_unit']['normalized_uri'] = URL_STR + unit_dict[found_value]
+                curr_json['cutoff_grade']['grade_unit']['normalized_uri'] = MINMOD_URL + unit_dict[found_value]
         
         # logger.debug(f"check cutoff grade Current json: {curr_json['cutoff_grade']}")
         curr_json['cutoff_grade']['grade_unit'] = generic.add_extraction_dict(value, curr_json['cutoff_grade']['grade_unit'])
@@ -219,7 +219,7 @@ def check_tonnage_unit(curr_json, value, unit_dict):
                     try:
                         float_val = float(curr_json['ore']['value']) * 1000
                         curr_json['ore']['value'] =  float_val
-                        curr_json['ore']['ore_unit']['normalized_uri'] = URL_STR + unit_dict["tonnes"]
+                        curr_json['ore']['ore_unit']['normalized_uri'] = MINMOD_URL + unit_dict["tonnes"]
                         
                     except ValueError:
                         logger.error(f"Got Type Error for : {curr_json['ore']['value']}")
@@ -228,14 +228,14 @@ def check_tonnage_unit(curr_json, value, unit_dict):
             found_value = generic.find_best_match(value, grade_unit_list)
             if found_value is not None:
                 # logger.debug(f"Found match value for ore_unit {found_value}")
-                curr_json['ore']['ore_unit']['normalized_uri'] = URL_STR + unit_dict[found_value]
+                curr_json['ore']['ore_unit']['normalized_uri'] = MINMOD_URL + unit_dict[found_value]
         
         curr_json['ore']['ore_unit'] = generic.add_extraction_dict(value, curr_json['ore']['ore_unit'])
             
                 
     return curr_json
 
-def check_category(current_json, URL_STR, value):
+def check_category(current_json, MINMOD_URL, value):
     ## update categories
     current_json['category'] = []
                      
@@ -243,11 +243,11 @@ def check_category(current_json, URL_STR, value):
         if "+" in value.lower():
             new_vals = value.lower().split("+")
             for val in new_vals:
-                inner_dict = {"normalized_uri": URL_STR + val.capitalize()}
+                inner_dict = {"normalized_uri": MINMOD_URL + val.capitalize()}
                 inner_dict = generic.add_extraction_dict(value, inner_dict)
                 current_json['category'].append(inner_dict)
         else:
-            inner_dict = {"normalized_uri": URL_STR + value.capitalize()}
+            inner_dict = {"normalized_uri": MINMOD_URL + value.capitalize()}
             inner_dict = generic.add_extraction_dict(value, inner_dict)
             current_json['category'].append(inner_dict)
             
@@ -305,7 +305,7 @@ def check_empty_headers_add_contained_metal(extraction):
     return extraction
 
 
-def check_material_form(curr_json, URL_STR, value):
+def check_material_form(curr_json, MINMOD_URL, value):
     if len(value) == 0:
         curr_json.pop('material_form')
         return curr_json
@@ -323,7 +323,7 @@ def check_material_form(curr_json, URL_STR, value):
     found_value = generic.find_best_match(value, list(options.keys()))
     if found_value is not None:
         logger.debug(f"Found match value for material_form {found_value}")
-        curr_json['material_form']['normalized_uri'] = URL_STR + options[found_value]
+        curr_json['material_form']['normalized_uri'] = MINMOD_URL + options[found_value]
         
     curr_json['material_form'] = generic.add_extraction_dict(value, curr_json['material_form'])
     

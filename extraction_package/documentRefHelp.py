@@ -7,7 +7,7 @@ import extraction_package.genericFunctions as generic
 import extraction_package.schemaFormat as schema
 import re
 import pandas as pd
-from settings import MINI_MODEL, STRUCTURE_MODEL, URL_STR, VERSION_NUMBER, SYSTEM_SOURCE, WORKING_DIR
+from settings import MINI_MODEL, STRUCTURE_MODEL, MINMOD_URL, VERSION_NUMBER, SYSTEM_SOURCE, WORKING_DIR
 
 
 
@@ -89,7 +89,7 @@ def normalize_mineral_site(dictionary):
             normalized_value = generic.find_best_match(new_value, list(epsg_dict.keys()), threshold=75)
             
             logger.debug(f"normalized: {normalized_value}")
-            dictionary["location_info"][key] = {'normalized_uri': URL_STR + epsg_dict[normalized_value]}
+            dictionary["location_info"][key] = {'normalized_uri': MINMOD_URL + epsg_dict[normalized_value]}
             dictionary["location_info"][key] = generic.add_extraction_dict(new_value, dictionary["location_info"][key] )
                        
         if key == 'country':
@@ -148,7 +148,7 @@ def add_country_or_state(code_name, new_key, new_value, country_list):
         result = df[df['name'] == normalized_value]
         m,_ = result.shape
         if m == 1:
-             json_str['normalized_uri'] = URL_STR + result['minmod_id'].values[0]
+             json_str['normalized_uri'] = MINMOD_URL + result['minmod_id'].values[0]
         else:
             new_result = result[result['country_name'].isin(country_list)]
             if not new_result.empty: 
@@ -156,7 +156,7 @@ def add_country_or_state(code_name, new_key, new_value, country_list):
                     for country in country_list:
                         match = new_result[new_result['country_name'] == country]
                         if not match.empty:
-                            json_str['normalized_uri'] = URL_STR + match['minmod_id'].values[0]
+                            json_str['normalized_uri'] = MINMOD_URL + match['minmod_id'].values[0]
                             break
             
     

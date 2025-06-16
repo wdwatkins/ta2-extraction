@@ -13,7 +13,7 @@ import extraction_package.LLMmodels as model
 import extraction_package.extractionPrompts as prompt
 
 
-from settings import VERSION_NUMBER, SYSTEM_SOURCE, MINI_MODEL, STRUCTURE_MODEL, URL_STR, WORKING_DIR
+from settings import VERSION_NUMBER, SYSTEM_SOURCE, MINI_MODEL, STRUCTURE_MODEL, MINMOD_URL, WORKING_DIR
 # Ignore the specific UserWarning from openpyxl
 warnings.filterwarnings(action='ignore', category=UserWarning, module='openpyxl')
 
@@ -49,7 +49,7 @@ def format_deposit_candidates(deposit_list, minmod_deposits):
         inner_dict["observed_name"] = dep
         normalized_value = generic.find_best_match(dep, minmod_deposits.keys())
         if normalized_value in minmod_deposits:
-            inner_dict["normalized_uri"] = URL_STR + minmod_deposits[normalized_value]
+            inner_dict["normalized_uri"] = MINMOD_URL + minmod_deposits[normalized_value]
    
         inner_dict["source"] =  SYSTEM_SOURCE + " "+ VERSION_NUMBER
         inner_dict["confidence"] = 1/len(deposit_list['deposits']) 

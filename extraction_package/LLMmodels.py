@@ -10,7 +10,7 @@ import time
 from pydantic import BaseModel, Field
 import openai
 from typing import List, Optional
-from settings import API_KEY, WORKING_DIR
+from settings import OPENAI_API_KEY, WORKING_DIR
 import warnings
 import requests
 import json

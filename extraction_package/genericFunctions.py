@@ -12,7 +12,7 @@ import re
 import csv
 import PyPDF2
 from fuzzywuzzy import process
-from settings import SYSTEM_SOURCE, VERSION_NUMBER, CDR_BEARER 
+from settings import SYSTEM_SOURCE, VERSION_NUMBER, CDR_BEARER, CDR_ENDPOINT
 from old_extraction_package_v2.ExtractPrompts import *
 import logging
 from collections import Counter
@@ -29,8 +29,8 @@ def download_document(doc_id, download_dir):
         'Authorization': 'Bearer '+ CDR_BEARER
     }
 
-    url_pdf = f'https://api.cdr.land/v1/docs/document/{doc_id}'
-    url_meta = f'https://api.cdr.land/v1/docs/document/meta/{doc_id}'
+    url_pdf = f'{CDR_ENDPOINT}/docs/document/{doc_id}'
+    url_meta = f'{CDR_ENDPOINT}/docs/document/meta/{doc_id}'
     # logger.debug(f"in download document CDR Bearer: {CDR_BEARER}")
 
     # Send the initial GET request

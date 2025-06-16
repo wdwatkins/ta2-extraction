@@ -8,7 +8,7 @@ This Data developed under a SBIR/STTR Contract No 140D0423C0093 is subject to SB
 import json
 import openai
 from typing import List
-from settings import API_KEY
+from settings import OPENAI_API_KEY, OPENAI_AZURE_ENDPOINT, OPENAI_AZURE_API_VERSION
 import requests
 import json
 from enum import Enum
@@ -19,10 +19,17 @@ import extraction_package.LLMmodels as model
 from settings import MINI_MODEL
 import logging
 
+
+logger = logging.getLogger(__name__)
+
 # Define a generic type for Enum
 T = TypeVar('T', bound=Enum)
-client = openai.OpenAI(api_key = API_KEY)
-logger = logging.getLogger(__name__)
+client = openai.OpenAI(api_key = OPENAI_API_KEY)
+if OPENAI_AZURE_ENDPOINT is not None:
+    client.azure_endpoint = OPENAI_AZURE_ENDPOINT
+    client.api_version = OPENAI_AZURE_API_VERSION
+    logger.info(f"Using Azure OpenAI with endpoint: {OPENAI_AZURE_ENDPOINT} and version: {OPENAI_AZURE_API_VERSION}")
+
 
 def get_gpt_response(prompt, model_type, schema_format):
     # logger.debug(f'Here is the prompt: {prompt} \n\n')
