@@ -66,3 +66,5 @@ created_pdf/
 automatic_evaluation/data/
 .env
 *.log
+*.json
+*.csv
