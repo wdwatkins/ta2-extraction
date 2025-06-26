@@ -13,7 +13,7 @@ from cdr_schemas.events import Event
 from fastapi import (BackgroundTasks, Depends, FastAPI, HTTPException, Request,
                      status)
 from pydantic_settings import BaseSettings
-from connectAPI import API
+from minmodapi import MinModAPI
 from cdr_schemas.document import Document
 import sys
 sys.path.append(os.path.abspath('/home/ubuntu/ta2-extraction'))
@@ -28,7 +28,7 @@ dotenv_path = os.path.abspath(os.path.join(os.path.dirname(__file__), './.env'))
 # Load the .env file
 load_dotenv(dotenv_path)
 print("Trying to log in")
-minmod_api=API('inferlink','ncUm1Y^Wy', 100)
+minmod_api=MinModAPI('inferlink','ncUm1Y^Wy', 100)
 minmod_api.login()
 print("Logged into minmod API: ",minmod_api.whoami())
 
