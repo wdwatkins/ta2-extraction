@@ -19,7 +19,7 @@ OPENAI_AZURE_ENDPOINT = os.getenv("OPENAI_AZURE_ENDPOINT", None)
 OPENAI_AZURE_API_VERSION = os.getenv("OPENAI_AZURE_API_VERSION")
 CDR_BEARER = os.getenv("CDR_BEARER")
 CDR_ENDPOINT = os.getenv("CDR_ENDPOINT")
-WORKING_DIR = os.path.expanduser("~/ta2-extraction")
+WORKING_DIR = os.path.expanduser("/app/")
 # print(API_KEY, WORKING_DIR, CDR_BEARER)
 MODEL_TYPE = "gpt-4o"
 LIBRARY_ID = "4530692"

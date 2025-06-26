@@ -28,15 +28,15 @@ dotenv_path = os.path.abspath(os.path.join(os.path.dirname(__file__), './.env'))
 # Load the .env file
 load_dotenv(dotenv_path)
 print("Trying to log in")
-minmod_api=MinModAPI('inferlink','ncUm1Y^Wy', 100)
-minmod_api.login()
+minmod_api=MinModAPI(endpoint=os.environ['MINMOD_ENDPOINT'])
+minmod_api.login(os.environ['MINMOD_API_USER'], os.environ['MINMOD_TOKEN'])
 print("Logged into minmod API: ",minmod_api.whoami())
 
 parser = argparse.ArgumentParser()
 args = parser.parse_args()
 
 class Settings(BaseSettings):
-    # TO BE CHANGED BY TA3-4 system.
+    # TO BE CHANGED BY TA3-4 system
     system_name: str = "xcorp_my_doc_system"
     system_version: str = "0.0.1"
     ml_model_name: str = "xcorp_docs_model"
