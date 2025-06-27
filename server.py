@@ -27,10 +27,7 @@ dotenv_path = os.path.abspath(os.path.join(os.path.dirname(__file__), './.env'))
 
 # Load the .env file
 load_dotenv(dotenv_path)
-print("Trying to log in")
-minmod_api=MinModAPI(endpoint=os.environ['MINMOD_ENDPOINT'])
-minmod_api.login(os.environ['MINMOD_API_USER'], os.environ['MINMOD_TOKEN'])
-print("Logged into minmod API: ",minmod_api.whoami())
+
 
 parser = argparse.ArgumentParser()
 args = parser.parse_args()
@@ -45,16 +42,22 @@ class Settings(BaseSettings):
     # Local port to run on
     local_port: int = 9999
     cdr_api_token: str
-    ngrok_authtoken: str
     # To be filled in programmatically via ngrok below.
     callback_url: str = ""
     # Secret string used for signature verification on callback.  Changed by TA3-4 system.
     registration_secret: str = "mysecret"
 
     # To be provided to TA3-4 system by CDR admin
-    user_api_token: str = os.environ["CDR_API_TOKEN"]
+    user_api_token: str = ""
     cdr_host: str = "https://api.cdr.land"
     admin_cdr_host: str = "https://admin.cdr.land"
+    openai_azure_endpoint: str = ""
+    openai_azure_api_version: str = "2023-05-15"
+    openai_api_key: str = ""
+    minmod_endpoint: str = "https://minmod.isi.edu/api"
+    minmod_user: str = ""
+    minmod_token: str = ""
+    working_dir: str = "/app/"
     # For local development
     # cdr_host: str = "http://0.0.0.0:8333"
     # admin_cdr_host: str = "http://0.0.0.0:3333"
@@ -69,7 +72,13 @@ class Settings(BaseSettings):
 
 print("Creating app_settings")
 app_settings = Settings()
+print(app_settings)
 print("app_settings was created")
+
+print("Trying to log in")
+minmod_api=MinModAPI(endpoint=os.environ['MINMOD_ENDPOINT'])
+minmod_api.login(os.environ['MINMOD_API_USER'], os.environ['MINMOD_TOKEN'])
+print("Logged into minmod API: ",minmod_api.whoami())
 
 # Get ngrok to give us an endpoint
 listener = ngrok.forward(app_settings.local_port, authtoken_from_env=True)
