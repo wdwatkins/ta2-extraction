@@ -12,7 +12,7 @@ import uvicorn.logging
 from cdr_schemas.events import Event
 from fastapi import (BackgroundTasks, Depends, FastAPI, HTTPException, Request,
                      status)
-from pydantic_settings import BaseSettings
+from settings import app_settings
 from minmodapi import MinModAPI
 from cdr_schemas.document import Document
 import sys
@@ -28,62 +28,17 @@ dotenv_path = os.path.abspath(os.path.join(os.path.dirname(__file__), './.env'))
 # Load the .env file
 load_dotenv(dotenv_path)
 
-
 parser = argparse.ArgumentParser()
 args = parser.parse_args()
 
-class Settings(BaseSettings):
-    # TO BE CHANGED BY TA3-4 system
-    system_name: str = "xcorp_my_doc_system"
-    system_version: str = "0.0.1"
-    ml_model_name: str = "xcorp_docs_model"
-    ml_model_version: str = "0.0.1"
-
-    # Local port to run on
-    local_port: int = 9999
-    cdr_api_token: str
-    # To be filled in programmatically via ngrok below.
-    callback_url: str = ""
-    # Secret string used for signature verification on callback.  Changed by TA3-4 system.
-    registration_secret: str = "mysecret"
-
-    # To be provided to TA3-4 system by CDR admin
-    user_api_token: str = ""
-    cdr_host: str = "https://api.cdr.land"
-    admin_cdr_host: str = "https://admin.cdr.land"
-    openai_azure_endpoint: str = ""
-    openai_azure_api_version: str = "2023-05-15"
-    openai_api_key: str = ""
-    minmod_endpoint: str = "https://minmod.isi.edu/api"
-    minmod_user: str = ""
-    minmod_token: str = ""
-    working_dir: str = "/app/"
-    # For local development
-    # cdr_host: str = "http://0.0.0.0:8333"
-    # admin_cdr_host: str = "http://0.0.0.0:3333"
-
-    # To be filled in programmatically after registration process below.  Needed to remove registration.
-    registration_id: str = ""
-
-    class Config:
-        case_sensitive = False
-        env_file = ".env"
-        env_file_encoding = "utf-8"
-
-print("Creating app_settings")
-app_settings = Settings()
-print(app_settings)
-print("app_settings was created")
-
 print("Trying to log in")
-minmod_api=MinModAPI(endpoint=os.environ['MINMOD_ENDPOINT'])
-minmod_api.login(os.environ['MINMOD_API_USER'], os.environ['MINMOD_TOKEN'])
+minmod_api=MinModAPI(app_settings.minmod_endpoint)
+minmod_api.login(app_settings.minmod_user, app_settings.minmod_token)
 print("Logged into minmod API: ",minmod_api.whoami())
 
 # Get ngrok to give us an endpoint
-listener = ngrok.forward(app_settings.local_port, authtoken_from_env=True)
-app_settings.callback_url = listener.url() + "/hook"
-
+#listener = ngrok.forward(app_settings.local_port, authtoken_from_env=True)
+#app_settings.callback_url = listener.url() + "/hook"
 
 def clean_up():
     # delete our registered system at CDR on program end
@@ -202,7 +157,6 @@ def run():
     uvicorn.run("__main__:app", host="0.0.0.0",
                 port=app_settings.local_port, reload=False)
 
-
 def register_system():
     """Register our system to the CDR using the app_settings"""
     global app_settings
@@ -229,7 +183,6 @@ def register_system():
     # Log our registration_id such we can delete it when we close the program.
     print(f"register system r: {r}")
     app_settings.registration_id = r.json()["id"]
-
 
 if __name__ == "__main__":
     ## Only have to register your system once
