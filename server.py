@@ -5,8 +5,9 @@ import hmac
 import os
 from fastapi.security import APIKeyHeader
 import httpx
+import ssl
+import certifi
 import datetime as date
-import ngrok
 import uvicorn
 import uvicorn.logging
 from cdr_schemas.events import Event
@@ -43,7 +44,10 @@ print("Logged into minmod API: ",minmod_api.whoami())
 def clean_up():
     # delete our registered system at CDR on program end
     headers = {'Authorization': f'Bearer {app_settings.user_api_token}'}
-    client = httpx.Client(follow_redirects=True)
+    ctx = ssl.create_default_context(
+        cafile=os.environ.get("SSL_CERT_FILE", certifi.where())
+        )
+    client = httpx.Client(follow_redirects=True, verify = ctx)
     client.delete(f"{app_settings.cdr_host}/user/me/register/{app_settings.registration_id}", headers=headers)
 
 
@@ -174,8 +178,10 @@ def register_system():
         "events": ["document.process", "ping"]
 
     }
-
-    client = httpx.Client(follow_redirects=True)
+    ctx = ssl.create_default_context(
+        cafile=os.environ.get("SSL_CERT_FILE", certifi.where())
+        )
+    client = httpx.Client(follow_redirects=True, verify = ctx)
 
     r = client.post(f"{app_settings.cdr_host}/user/me/register",
                     json=registration, headers=headers)
