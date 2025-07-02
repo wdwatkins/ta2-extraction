@@ -14,6 +14,19 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Set the working directory in the container
 WORKDIR /app
 
+# Add DOI CA to local CAs so that SSL can work over VPN
+COPY DOIRootCA2.crt /usr/local/share/ca-certificates
+
+RUN chmod 644 /usr/local/share/ca-certificates/DOIRootCA2.crt && \
+    update-ca-certificates
+
+ENV PIP_CERT="/etc/ssl/certs/ca-certificates.crt" \
+    SSL_CERT_FILE="/etc/ssl/certs/ca-certificates.crt" \
+    CURL_CA_BUNDLE="/etc/ssl/certs/ca-certificates.crt" \
+    REQUESTS_CA_BUNDLE="/etc/ssl/certs/ca-certificates.crt" \
+    AWS_CA_BUNDLE="/etc/ssl/certs/ca-certificates.crt" \
+    IN_CONTAINER="True"
+
 # Copy dependency file first to leverage Docker layer caching
 COPY requirements.txt ./
 

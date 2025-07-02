@@ -47,7 +47,7 @@ class Settings(BaseSettings):
 
     # Local port to run on
     local_port: int = 80
-    cdr_api_token: str
+    cdr_bearer: str
     # To be filled in programmatically via ngrok below.
     callback_url: str = ""
     # Secret string used for signature verification on callback.  Changed by TA3-4 system.

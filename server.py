@@ -43,7 +43,7 @@ print("Logged into minmod API: ",minmod_api.whoami())
 
 def clean_up():
     # delete our registered system at CDR on program end
-    headers = {'Authorization': f'Bearer {app_settings.user_api_token}'}
+    headers = {'Authorization': f'Bearer {app_settings.cdr_bearer}'}
     ctx = ssl.create_default_context(
         cafile=os.environ.get("SSL_CERT_FILE", certifi.where())
         )
@@ -164,7 +164,7 @@ def run():
 def register_system():
     """Register our system to the CDR using the app_settings"""
     global app_settings
-    headers = {'Authorization': f'Bearer {app_settings.user_api_token}'}
+    headers = {'Authorization': f'Bearer {app_settings.cdr_bearer}'}
     # print(headers)
     registration = {
         "name": app_settings.system_name,
