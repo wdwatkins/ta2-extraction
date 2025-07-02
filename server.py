@@ -173,7 +173,7 @@ def register_system():
         "webhook_secret": app_settings.registration_secret,
         # Leave blank if callback url has no auth requirement
         "auth_header": "",
-        "auth_token": "",
+        "auth_token": app_settings.registration_secret,
         # Registers for ALL events
         "events": ["document.process", "ping"]
 

@@ -40,7 +40,7 @@ MINI_MODEL = "gpt-4o-mini"
 # they are duplicative.  This class is only used in server.py
 class Settings(BaseSettings):
     # TO BE CHANGED BY TA3-4 system
-    system_name: str = "xcorp_my_doc_system"
+    system_name: str = "inferlink_extraction"
     system_version: str = "0.0.1"
     ml_model_name: str = "xcorp_docs_model"
     ml_model_version: str = "0.0.1"
