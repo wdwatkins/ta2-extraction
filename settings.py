@@ -64,7 +64,7 @@ class Settings(BaseSettings):
     minmod_user: str = ""
     minmod_token: str = ""
     working_dir: str = "/app/"
-    callback_url: str = "extract.dev-minmod.chs.usgs.gov/hook"
+    callback_url: str = "http://extract.dev-minmod.chs.usgs.gov/hook"
     # For local development
     # cdr_host: str = "http://0.0.0.0:8333"
     # admin_cdr_host: str = "http://0.0.0.0:3333"
