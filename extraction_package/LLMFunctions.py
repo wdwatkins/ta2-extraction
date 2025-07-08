@@ -31,18 +31,20 @@ def openai_authenticate():
         openai.api_type = 'azure'
         openai.api_version = OPENAI_AZURE_API_VERSION
         logger.info(f"Using Azure OpenAI with endpoint: {OPENAI_AZURE_ENDPOINT} and version: {OPENAI_AZURE_API_VERSION}")
-        client = openai.OpenAI(api_key=OPENAI_API_KEY)
+       # client = openai.OpenAI(api_key=OPENAI_API_KEY)
     else: 
         logger.info("Using OpenAI API without Azure configuration")
-        client = openai.OpenAI(api_key = OPENAI_API_KEY)
+        #client = openai.OpenAI(api_key = OPENAI_API_KEY)
+    openai.api_key = OPENAI_API_KEY
     logger.debug("Client values: %s", dir(client))
-    return client
+    #return client
 
 def get_gpt_response(prompt, model_type, schema_format):
     # logger.debug(f'Here is the prompt: {prompt} \n\n')
     # logger.debug(f"schema: {schema_format}\n\n")
-    client = openai_authenticate()
-    completion = client.beta.chat.completions.parse(
+    openai_authenticate()
+    logger.debug("OpenAI base setting: %s", openai.api_base)
+    completion = openai.chat.completions.parse(
     model= model_type,
     messages=[
         {"role": "system", "content": """You are a geology expert and you are very good in understanding mining reports, which is attached.
