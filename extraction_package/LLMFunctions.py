@@ -36,7 +36,6 @@ def openai_authenticate():
         logger.info("Using OpenAI API without Azure configuration")
         #client = openai.OpenAI(api_key = OPENAI_API_KEY)
     openai.api_key = OPENAI_API_KEY
-    logger.debug("Client values: %s", dir(client))
     #return client
 
 def get_gpt_response(prompt, model_type, schema_format):
