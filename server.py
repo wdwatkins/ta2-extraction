@@ -9,7 +9,7 @@ import ssl
 import certifi
 import datetime as date
 import uvicorn
-import uvicorn.logging
+import logging
 from cdr_schemas.events import Event
 from fastapi import (BackgroundTasks, Depends, FastAPI, HTTPException, Request,
                      status)
@@ -22,6 +22,9 @@ sys.path.append(os.path.abspath('/home/ubuntu/ta2-extraction'))
 import extraction_package.genericFunctions as generic
 import extraction_package.pipeline as extract 
 from dotenv import load_dotenv
+
+logging.basicConfig(level=app_settings.log_level)
+logger = logging.getLogger(__name__)
 
 # Specify the path to the .env file
 dotenv_path = os.path.abspath(os.path.join(os.path.dirname(__file__), './.env'))
@@ -68,17 +71,17 @@ async def event_handler(evt: Event):
                 document = Document(**evt.payload)
                 download_link = f"https://docs.polymer.rocks/cdr/download/{document.id}"
                 print(download_link)
-                count, belowLimit = minmod_api.increment()
+                #count, belowLimit = minmod_api.increment()
                 
                     
-                if belowLimit:                
+                if True:                
                     record_id = document.id
                     # print(f"Looking at record_id: {record_id}")
                     ifexists = minmod_api.has_site(record_id)
                     
                     print(f"Record ID: exists in CDR: {ifexists}")
-                    download_dir = "/home/ubuntu/cdr_client_examples/sample_cdr_doc_subscriber/sample_cdr_doc_subscriber/downloaded_reports/"
-                    output_folder_path = "/home/ubuntu/cdr_client_examples/sample_cdr_doc_subscriber/sample_cdr_doc_subscriber/finished_extractions/"
+                    download_dir = "/app/reports/"
+                    output_folder_path = "/app/output/"
                     file_name = None
                     
                     if not ifexists:

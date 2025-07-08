@@ -55,7 +55,7 @@ class Settings(BaseSettings):
 
     # To be provided to TA3-4 system by CDR admin
     user_api_token: str = ""
-    cdr_host: str = "https://api.cdr.land"
+    cdr_host: str = ""
     admin_cdr_host: str = "https://admin.cdr.land"
     openai_azure_endpoint: str = ""
     openai_azure_api_version: str = "2023-05-15"
@@ -65,6 +65,7 @@ class Settings(BaseSettings):
     minmod_token: str = ""
     working_dir: str = "/app/"
     callback_url: str = "http://extract.dev-minmod.chs.usgs.gov/hook"
+    log_level: str = 'DEBUG'
     # For local development
     # cdr_host: str = "http://0.0.0.0:8333"
     # admin_cdr_host: str = "http://0.0.0.0:3333"

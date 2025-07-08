@@ -29,8 +29,8 @@ def download_document(doc_id, download_dir):
         'Authorization': 'Bearer '+ CDR_BEARER
     }
 
-    url_pdf = f'{CDR_ENDPOINT}/docs/document/{doc_id}'
-    url_meta = f'{CDR_ENDPOINT}/docs/document/meta/{doc_id}'
+    url_pdf = f'{CDR_ENDPOINT}/v1/docs/document/{doc_id}'
+    url_meta = f'{CDR_ENDPOINT}/v1/docs/document/meta/{doc_id}'
     # logger.debug(f"in download document CDR Bearer: {CDR_BEARER}")
 
     # Send the initial GET request
