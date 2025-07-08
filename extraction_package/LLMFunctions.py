@@ -27,7 +27,7 @@ T = TypeVar('T', bound=Enum)
 def openai_authenticate():
     logger.debug("AZURE_ENDPOINT: %s", OPENAI_AZURE_ENDPOINT)
     if OPENAI_AZURE_ENDPOINT is not None:
-        openai.api_base = OPENAI_AZURE_ENDPOINT
+        openai.azure_endpoint = OPENAI_AZURE_ENDPOINT
         openai.api_type = 'azure'
         openai.api_version = OPENAI_AZURE_API_VERSION
         logger.info(f"Using Azure OpenAI with endpoint: {OPENAI_AZURE_ENDPOINT} and version: {OPENAI_AZURE_API_VERSION}")
