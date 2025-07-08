@@ -27,13 +27,15 @@ T = TypeVar('T', bound=Enum)
 def openai_authenticate():
     logger.debug("AZURE_ENDPOINT: %s", OPENAI_AZURE_ENDPOINT)
     if OPENAI_AZURE_ENDPOINT is not None:
-        openai.azure_endpoint = OPENAI_AZURE_ENDPOINT
+        openai.api_base = OPENAI_AZURE_ENDPOINT
+        openai.api_type = 'azure'
         openai.api_version = OPENAI_AZURE_API_VERSION
         logger.info(f"Using Azure OpenAI with endpoint: {OPENAI_AZURE_ENDPOINT} and version: {OPENAI_AZURE_API_VERSION}")
+        client = openai.OpenAI(api_key=OPENAI_API_KEY)
     else: 
         logger.info("Using OpenAI API without Azure configuration")
-    client = openai.OpenAI(api_key = OPENAI_API_KEY)
-    logger.debug("Client values: %s", client)
+        client = openai.OpenAI(api_key = OPENAI_API_KEY)
+    logger.debug("Client values: %s", dir(client))
     return client
 
 def get_gpt_response(prompt, model_type, schema_format):
