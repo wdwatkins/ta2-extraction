@@ -43,8 +43,13 @@ def download_document(doc_id, download_dir):
         
         response = requests.get(url_pdf, headers=headers)
 
-        if response.status_code == 200:    
-            with open(f'{download_dir}{doc_id}_{title}.pdf', 'wb') as file:
+        if response.status_code == 200:
+            pdf_name = f'{download_dir}{doc_id}_{title}.pdf'
+            if len(pdf_name) > 255:
+                # If the path is too long, shorten it
+                pdf_name = f'{download_dir}{doc_id}_{title[:200]}.pdf'
+                logger.warning(f"File name too long, shortened to: {pdf_name}")    
+            with open(pdf_name, 'wb') as file:
                 file.write(response.content)
             logger.info(f"Document downloaded and saved as '{title}.pdf'")
             return f"{doc_id}_{title}.pdf"
