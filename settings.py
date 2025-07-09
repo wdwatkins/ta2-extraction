@@ -33,7 +33,7 @@ CATEGORY_VALUES = ["inferred", "indicated","measured", "probable",
 MINMOD_URL = "https://minmod.isi.edu/resource/"
 VERSION_NUMBER = "v3"
 SYSTEM_SOURCE = "Inferlink Extraction"
-STRUCTURE_MODEL = "gpt-4o-2024-08-06"
+STRUCTURE_MODEL = "gpt-4o"
 MINI_MODEL = "gpt-4o-mini"
 
 #TODO: all files should either use this or the variables above

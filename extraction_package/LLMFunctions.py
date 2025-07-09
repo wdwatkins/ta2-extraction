@@ -31,18 +31,14 @@ def openai_authenticate():
         openai.api_type = 'azure'
         openai.api_version = OPENAI_AZURE_API_VERSION
         logger.info(f"Using Azure OpenAI with endpoint: {OPENAI_AZURE_ENDPOINT} and version: {OPENAI_AZURE_API_VERSION}")
-       # client = openai.OpenAI(api_key=OPENAI_API_KEY)
     else: 
         logger.info("Using OpenAI API without Azure configuration")
-        #client = openai.OpenAI(api_key = OPENAI_API_KEY)
     openai.api_key = OPENAI_API_KEY
-    #return client
 
 def get_gpt_response(prompt, model_type, schema_format):
     # logger.debug(f'Here is the prompt: {prompt} \n\n')
     # logger.debug(f"schema: {schema_format}\n\n")
     openai_authenticate()
-    logger.debug("OpenAI base setting: %s", openai.api_base)
     completion = openai.chat.completions.parse(
     model= model_type,
     messages=[
@@ -55,8 +51,6 @@ def get_gpt_response(prompt, model_type, schema_format):
             "json_schema": {"name": "JSONSCHEMA","schema": schema_format}
     },
 )
-    # logger.debug("API response:", completion)
-    
     try:
         content = completion.choices[0].message.content
         # Parse the JSON content if needed

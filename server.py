@@ -79,20 +79,21 @@ async def event_handler(evt: Event):
                     # print(f"Looking at record_id: {record_id}")
                     ifexists = minmod_api.has_site(record_id)
                     
-                    print(f"Record ID: exists in CDR: {ifexists}")
+                    logger.info(f"Record ID: exists in CDR: {ifexists}")
                     download_dir = "/app/reports/"
                     output_folder_path = "/app/output/"
                     file_name = None
                     
                     if not ifexists:
                         file_name = generic.download_document(record_id, download_dir)
-                        print(f"Finished Downloading: {file_name}")
+                        logger.info(f"Finished Downloading: {file_name}")
                     
                     if file_name is not None:
-                        print(f"Going to start extracting: {file_name}")
+                        logger.info(f"Going to start extracting: {file_name}")
                         json_output = extract.run(download_dir, file_name, output_folder_path)
-                        # print("Completed Extraction")
-                        try: 
+                        logger.info("Completed Extraction")
+                        try:
+                            logger.debug("Attempting upsert to minmod")
                             print(minmod_api.upsert_mineral_site(json_output))
                             # print("Finished posting to the API!")
                         except Exception as e:
