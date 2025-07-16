@@ -14,7 +14,7 @@ from cdr_schemas.events import Event
 from fastapi import (BackgroundTasks, Depends, FastAPI, HTTPException, Request,
                      status)
 from settings import app_settings
-from minmodapi import MinModAPI
+from minmodapi import MinModAPI, replace_site
 from cdr_schemas.document import Document
 import sys
 sys.path.append(os.path.abspath('/home/ubuntu/ta2-extraction'))
@@ -91,13 +91,14 @@ async def event_handler(evt: Event):
                     if file_name is not None:
                         logger.info(f"Going to start extracting: {file_name}")
                         json_output = extract.run(download_dir, file_name, output_folder_path)
+                        logger.debug(f"Json output: {json_output}")
                         logger.info("Completed Extraction")
                         try:
                             logger.debug("Attempting upsert to minmod")
-                            print(minmod_api.upsert_mineral_site(json_output))
-                            # print("Finished posting to the API!")
+                            upsert_response = minmod_api.upsert_mineral_site(json_output, apply_update=replace_site)
+                            logger.debug("Minmod response to upsert: %s", upsert_response)
                         except Exception as e:
-                            print(f"Had some sort of error: {e}")
+                            logger.warning(f"Had some sort of error: {e}")
                         
                         
                         download_file_path = os.path.join(download_dir, file_name)

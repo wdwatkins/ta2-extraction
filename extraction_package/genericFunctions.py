@@ -47,7 +47,7 @@ def download_document(doc_id, download_dir):
             pdf_name = f'{download_dir}{doc_id}_{title}.pdf'
             if len(pdf_name) > 255:
                 # If the path is too long, shorten it
-                pdf_name = f'{download_dir}{doc_id}_{title[:200]}.pdf'
+                pdf_name = f'{download_dir}{doc_id}_{title[:150]}.pdf'
                 logger.warning(f"File name too long, shortened to: {pdf_name}")    
             with open(pdf_name, 'wb') as file:
                 file.write(response.content)
