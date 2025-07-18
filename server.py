@@ -95,10 +95,11 @@ async def event_handler(evt: Event):
                         logger.info("Completed Extraction")
                         try:
                             logger.debug("Attempting upsert to minmod")
-                            upsert_response = minmod_api.upsert_mineral_site(json_output, apply_update=replace_site)
-                            logger.debug("Minmod response to upsert: %s", upsert_response)
+                            for item in json_output:
+                                upsert_response = minmod_api.upsert_mineral_site(item, apply_update=replace_site)
+                                logger.debug("Minmod response to upsert: %s", upsert_response)
                         except Exception as e:
-                            logger.warning(f"Had some sort of error: {e}")
+                            logger.warning(f"Error from Minmod: {e}")
                         
                         
                         download_file_path = os.path.join(download_dir, file_name)
