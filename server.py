@@ -96,6 +96,7 @@ async def event_handler(evt: Event):
                         try:
                             logger.debug("Attempting upsert to minmod")
                             for item in json_output:
+                                logger.debug(f"mineral site json: {item}")
                                 upsert_response = minmod_api.upsert_mineral_site(item, apply_update=replace_site)
                                 logger.debug("Minmod response to upsert: %s", upsert_response)
                         except Exception as e:
