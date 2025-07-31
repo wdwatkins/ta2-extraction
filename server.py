@@ -96,6 +96,8 @@ async def event_handler(evt: Event):
                         try:
                             logger.debug("Attempting upsert to minmod")
                             for item in json_output:
+                                item['source_id'] = "https://api.cdr.land/v1/docs/documents" # hard code for now to be consistent with USC deployment
+                                logger.debug("Note hard-coded source_id field")
                                 logger.debug(f"mineral site json: {item}")
                                 upsert_response = minmod_api.upsert_mineral_site(item, apply_update=replace_site)
                                 logger.debug("Minmod response to upsert: %s", upsert_response)
